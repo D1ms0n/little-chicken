@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ставка тижня ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,sans-serif;
+}
+
+body{
+    background:linear-gradient(180deg,#10131b,#1d2432);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    padding:20px;
+}
+
+.card{
+    width:100%;
+    max-width:460px;
+    background:#1f2937;
+    border-radius:25px;
+    padding:30px;
+    box-shadow:0 25px 60px rgba(0,0,0,.4);
+}
+
+h1{
+    text-align:center;
+    font-size:34px;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#d6d6d6;
+    margin-bottom:25px;
+}
+
+#countdown{
+    text-align:center;
+    font-size:44px;
+    font-weight:800;
+    color:#ffe600;
+    margin:20px 0;
+}
+
+.small{
+    text-align:center;
+    color:#aaa;
+    margin-bottom:30px;
+}
+
+.bet{
+    background:#293548;
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:18px;
+    cursor:pointer;
+    transition:.25s;
+    border:2px solid transparent;
+}
+
+.bet:hover{
+    transform:scale(1.02);
+}
+
+.bet.selected{
+    border-color:#ffe600;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.name{
+    font-size:22px;
+    font-weight:700;
+}
+
+.odds{
+    font-size:22px;
+    color:#ffe600;
+    font-weight:800;
+}
+
+.progress{
+    margin-top:14px;
+    background:#111827;
+    height:12px;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.fill{
+    height:100%;
+}
+
+.green{
+    background:#21d07a;
+}
+
+.red{
+    background:#ff4b5c;
+}
+
+button{
+    width:100%;
+    margin-top:20px;
+    background:#ffe600;
+    border:none;
+    color:#111;
+    font-size:20px;
+    padding:18px;
+    border-radius:18px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+button:hover{
+    transform:scale(1.02);
+}
+
+.stats{
+    margin-top:25px;
+    text-align:center;
+    color:#cfcfcf;
+    line-height:1.8;
+}
+
+.footer{
+    text-align:center;
+    color:#777;
+    font-size:13px;
+    margin-top:25px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>🔥 Ставка тижня</h1>
+
+<div class="subtitle">
+Чи буде побачення успішним?
+</div>
+
+<div id="countdown">
+00:00:00:00
+</div>
+
+<div class="small">
+До завершення прийому ставок
+</div>
+
+<div class="bet" onclick="vote('yes',this)">
+<div class="row">
+<div class="name">❤️ Так</div>
+<div class="odds">1.42</div>
+</div>
+
+<div class="progress">
+<div class="fill green" id="yesBar" style="width:72%"></div>
+</div>
+
+<div style="margin-top:8px;">72%</div>
+</div>
+
+<div class="bet" onclick="vote('no',this)">
+<div class="row">
+<div class="name">💔 Ні</div>
+<div class="odds">3.75</div>
+</div>
+
+<div class="progress">
+<div class="fill red" id="noBar" style="width:28%"></div>
+</div>
+
+<div style="margin-top:8px;">28%</div>
+</div>
+
+<button onclick="submitVote()">
+Поставити ставку
+</button>
+
+<div class="stats">
+Всього ставок: <b id="total">128</b><br>
+
+❤️ Так: <b id="yesVotes">92</b><br>
+
+💔 Ні: <b id="noVotes">36</b>
+</div>
+
+<div class="footer">
+Ставки приймаються до наступного вівторка 24:00
+</div>
+
+</div>
+
+<script>
+
+let selected=null;
+
+function vote(type,el){
+
+document.querySelectorAll(".bet").forEach(x=>x.classList.remove("selected"));
+
+el.classList.add("selected");
+
+selected=type;
+
+}
+
+function submitVote(){
+
+if(!selected){
+
+alert("Оберіть варіант 😊");
+
+return;
+
+}
+
+if(selected=="yes"){
+
+document.getElementById("yesVotes").innerText++;
+
+}else{
+
+document.getElementById("noVotes").innerText++;
+
+}
+
+document.getElementById("total").innerText++;
+
+alert("✅ Ставку прийнято!");
+
+}
+
+function nextTuesday(){
+
+let now=new Date();
+
+let target=new Date(now);
+
+let day=target.getDay();
+
+let diff=(2-day+7)%7;
+
+if(diff===0){
+
+if(now.getHours()>=24){
+diff=7;
+}
+}
+
+target.setDate(target.getDate()+diff+1);
+
+target.setHours(0,0,0,0);
+
+return target;
+
+}
+
+function update(){
+
+let target=nextTuesday();
+
+let now=new Date();
+
+let distance=target-now;
+
+if(distance<=0){
+
+document.getElementById("countdown").innerHTML="🏁 Закрито";
+
+return;
+
+}
+
+let days=Math.floor(distance/86400000);
+
+let hours=Math.floor(distance%86400000/3600000);
+
+let mins=Math.floor(distance%3600000/60000);
+
+let secs=Math.floor(distance%60000/1000);
+
+document.getElementById("countdown").innerHTML=
+`${days}д ${hours}г ${mins}хв ${secs}с`;
+
+}
+
+update();
+
+setInterval(update,1000);
+
+</script>
+
+</body>
+</html>
