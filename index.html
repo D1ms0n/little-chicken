@@ -10,67 +10,23 @@ body{
     margin:0;
     background:#000;
     display:flex;
-    flex-direction:column;
     justify-content:center;
     align-items:center;
     height:100vh;
-    color:white;
-    font-family:Arial;
-    text-align:center;
 }
 
-img{
-    max-width:90%;
-    max-height:70vh;
-    border-radius:12px;
-}
-
-h1{
-    margin-bottom:10px;
-    color:#FFD500;
-    font-size:34px;
-}
-
-p{
-    opacity:0.8;
-    font-size:20px;
-}
-
-button{
-    margin-top:20px;
-    padding:10px 20px;
-    background:#FFD500;
-    border:none;
-    border-radius:10px;
-    font-size:16px;
-    cursor:pointer;
+video{
+    max-width:100%;
+    max-height:100%;
 }
 </style>
 </head>
 
 <body>
 
-<h1>😏 NICE</h1>
-
-<img src="https://media.giphy.com/media/yJFeycRK2DB4c/giphy.gif">
-
-<p>Чайочок — done ☕️</p>
-
-<button onclick="playSound()">🔊 nice</button>
-
-<audio id="sound" src="https://www.myinstants.com/media/sounds/nice.mp3"></audio>
-
-<script>
-const audio = document.getElementById("sound");
-
-window.addEventListener("load", () => {
-    audio.play().catch(() => {});
-});
-
-function playSound(){
-    audio.play();
-}
-</script>
+<video autoplay playsinline controls>
+    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+</video>
 
 </body>
 </html>
