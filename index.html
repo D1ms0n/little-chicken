@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💸 Pay up</title>
+<title>😏 Done</title>
 
 <style>
 body{
@@ -26,21 +26,56 @@ img{
 }
 
 h1{
-    margin-bottom:20px;
+    margin-bottom:10px;
     color:#FFD500;
+    font-size:34px;
+}
+
+p{
+    opacity:0.8;
+    font-size:20px;
+}
+
+button{
+    margin-top:20px;
+    padding:10px 20px;
+    background:#FFD500;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
-<h1>💸 Плати 😏</h1>
+<h1>😏 WELL DONE</h1>
 
-<img src="https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif">
+<img src="https://media.giphy.com/media/111ebonMs90YLu/giphy.gif">
 
-<p style="margin-top:20px; opacity:0.7;">
-Ти програв парі
-</p>
+<p>Чайочок — done ☕️</p>
+
+<!-- кнопка якщо авто не спрацює -->
+<button onclick="playSound()">🔊 Увімкнути звук</button>
+
+<audio id="sound" src="https://www.myinstants.com/media/sounds/nice.mp3"></audio>
+
+<script>
+const audio = document.getElementById("sound");
+
+// пробуємо автостарт
+window.addEventListener("load", () => {
+    audio.play().catch(() => {
+        console.log("Автозвук заблокований браузером");
+    });
+});
+
+// ручний запуск
+function playSound(){
+    audio.play();
+}
+</script>
 
 </body>
 </html>
