@@ -3,51 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💖 It worked!</title>
+<title>💸 Pay up</title>
 
 <style>
 body{
     margin:0;
     background:#000;
     display:flex;
+    flex-direction:column;
     justify-content:center;
     align-items:center;
     height:100vh;
-    overflow:hidden;
+    color:white;
+    font-family:Arial;
+    text-align:center;
 }
 
 img{
-    max-width:100%;
-    max-height:100%;
-    object-fit:contain;
+    max-width:90%;
+    max-height:70vh;
+    border-radius:12px;
+}
+
+h1{
+    margin-bottom:20px;
+    color:#FFD500;
 }
 </style>
 </head>
 
 <body>
 
-<img id="gif" src="">
+<h1>💸 Плати 😏</h1>
 
-<script>
+<img src="https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif">
 
-// список радісних гіфок
-const gifs = [
-"https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif", // couple happy
-"https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif", // hugging
-"https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif", // celebration
-"https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif", // love
-"https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif", // excited
-"https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif", // happy couple
-"https://media.giphy.com/media/111ebonMs90YLu/giphy.gif", // cheering
-"https://media.giphy.com/media/3o7aCTfyhYawdOXcFW/giphy.gif" // love vibes
-];
-
-// випадковий вибір
-const random = gifs[Math.floor(Math.random() * gifs.length)];
-
-document.getElementById("gif").src = random;
-
-</script>
+<p style="margin-top:20px; opacity:0.7;">
+Ти програв парі
+</p>
 
 </body>
 </html>
