@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>😏 Done</title>
+<title>😏 Nice</title>
 
 <style>
 body{
@@ -50,28 +50,23 @@ button{
 
 <body>
 
-<h1>😏 WELL DONE</h1>
+<h1>😏 NICE</h1>
 
-<img src="https://media.giphy.com/media/111ebonMs90YLu/giphy.gif">
+<img src="https://media.giphy.com/media/yJFeycRK2DB4c/giphy.gif">
 
 <p>Чайочок — done ☕️</p>
 
-<!-- кнопка якщо авто не спрацює -->
-<button onclick="playSound()">🔊 Увімкнути звук</button>
+<button onclick="playSound()">🔊 nice</button>
 
 <audio id="sound" src="https://www.myinstants.com/media/sounds/nice.mp3"></audio>
 
 <script>
 const audio = document.getElementById("sound");
 
-// пробуємо автостарт
 window.addEventListener("load", () => {
-    audio.play().catch(() => {
-        console.log("Автозвук заблокований браузером");
-    });
+    audio.play().catch(() => {});
 });
 
-// ручний запуск
 function playSound(){
     audio.play();
 }
