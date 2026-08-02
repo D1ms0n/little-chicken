@@ -14,7 +14,20 @@ body{
     overflow:hidden;
 }
 
-/* затемнення */
+/* 18+ badge */
+.badge{
+    position:absolute;
+    top:15px;
+    right:15px;
+    background:#ff2e2e;
+    color:white;
+    padding:8px 12px;
+    border-radius:8px;
+    font-weight:bold;
+    font-size:14px;
+}
+
+/* overlay */
 .overlay{
     position:absolute;
     width:100%;
@@ -22,7 +35,7 @@ body{
     background:linear-gradient(180deg, rgba(0,0,0,0.8), rgba(0,0,0,1));
 }
 
-/* центр */
+/* center */
 .center{
     position:absolute;
     top:50%;
@@ -48,7 +61,7 @@ h2{
     margin:20px 0;
 }
 
-/* telegram bubbles */
+/* chats */
 .chats{
     position:absolute;
     bottom:20px;
@@ -78,6 +91,8 @@ h2{
 
 <body>
 
+<div class="badge">🔞 18+</div>
+
 <div class="overlay"></div>
 
 <div class="center">
@@ -93,18 +108,15 @@ h2{
     </p>
 </div>
 
-<!-- Telegram-style reactions -->
 <div class="chats">
-
-<div class="chat">👀 Що там буде?</div>
-<div class="chat">😏 після такого першого разу...</div>
-<div class="chat">🔥 я ставлю що буде ще краще</div>
-<div class="chat">😂 366 були праві</div>
-<div class="chat">❤️ вона прийде?</div>
-<div class="chat">👀 це вже серіал</div>
-<div class="chat">🍿 чекаю розвиток</div>
-<div class="chat">😄 чайочок буде?</div>
-
+    <div class="chat">👀 Що там буде?</div>
+    <div class="chat">😏 після такого першого разу...</div>
+    <div class="chat">🔥 я ставлю що буде ще краще</div>
+    <div class="chat">😂 366 були праві</div>
+    <div class="chat">❤️ вона прийде?</div>
+    <div class="chat">👀 це вже серіал</div>
+    <div class="chat">🍿 чекаю розвиток</div>
+    <div class="chat">😄 чайочок буде?</div>
 </div>
 
 </body>
