@@ -11,49 +11,39 @@ body{
     background:#0b0b0b;
     color:white;
     font-family:Arial;
-    overflow:hidden;
 }
 
-/* 18+ badge */
+/* 18+ */
 .badge{
-    position:absolute;
+    position:fixed;
     top:15px;
     right:15px;
     background:#ff2e2e;
-    color:white;
     padding:8px 12px;
     border-radius:8px;
     font-weight:bold;
-    font-size:14px;
 }
 
-/* overlay */
-.overlay{
-    position:absolute;
-    width:100%;
-    height:100%;
-    background:linear-gradient(180deg, rgba(0,0,0,0.8), rgba(0,0,0,1));
-}
-
-/* center */
-.center{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
+/* layout */
+.container{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
     text-align:center;
-    width:90%;
 }
 
+/* текст */
 h1{
-    font-size:36px;
+    font-size:34px;
     color:#FFD500;
-    margin-bottom:10px;
+    margin:10px 0;
 }
 
 h2{
-    font-size:22px;
-    opacity:0.8;
+    opacity:0.7;
 }
 
 .big{
@@ -61,15 +51,14 @@ h2{
     margin:20px 0;
 }
 
-/* chats */
+/* чати */
 .chats{
-    position:absolute;
-    bottom:20px;
-    width:100%;
+    margin-top:40px;
     display:flex;
+    flex-wrap:wrap;
     justify-content:center;
     gap:10px;
-    flex-wrap:wrap;
+    max-width:500px;
 }
 
 .chat{
@@ -78,13 +67,14 @@ h2{
     border-radius:20px;
     font-size:14px;
     opacity:0.9;
-    animation:float 6s infinite ease-in-out;
+    max-width:90%;
 }
 
-@keyframes float{
-    0%{transform:translateY(0);}
-    50%{transform:translateY(-10px);}
-    100%{transform:translateY(0);}
+/* адаптив */
+@media (max-width:400px){
+    .big{
+        font-size:32px;
+    }
 }
 </style>
 </head>
@@ -93,9 +83,8 @@ h2{
 
 <div class="badge">🔞 18+</div>
 
-<div class="overlay"></div>
+<div class="container">
 
-<div class="center">
     <h2>🎬 Нова серія</h2>
     <h1>Dasha Little Kurochka</h1>
 
@@ -103,20 +92,21 @@ h2{
         НОВЕ ПОБАЧЕННЯ
     </div>
 
-    <p style="opacity:0.7;">
+    <p style="opacity:0.6;">
         Всі чекають продовження...
     </p>
-</div>
 
-<div class="chats">
-    <div class="chat">👀 Що там буде?</div>
-    <div class="chat">😏 після такого першого разу...</div>
-    <div class="chat">🔥 я ставлю що буде ще краще</div>
-    <div class="chat">😂 366 були праві</div>
-    <div class="chat">❤️ вона прийде?</div>
-    <div class="chat">👀 це вже серіал</div>
-    <div class="chat">🍿 чекаю розвиток</div>
-    <div class="chat">😄 чайочок буде?</div>
+    <div class="chats">
+        <div class="chat">👀 Що там буде?</div>
+        <div class="chat">😏 після такого першого разу...</div>
+        <div class="chat">🔥 я ставлю що буде ще краще</div>
+        <div class="chat">😂 366 були праві</div>
+        <div class="chat">❤️ вона прийде?</div>
+        <div class="chat">👀 це вже серіал</div>
+        <div class="chat">🍿 чекаю розвиток</div>
+        <div class="chat">😄 чайочок буде?</div>
+    </div>
+
 </div>
 
 </body>
