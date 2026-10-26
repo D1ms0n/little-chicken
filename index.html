@@ -3,191 +3,877 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Бінго: Холостяк 15</title>
+<title>Little Chicken — вебстудія</title>
+<meta name="description" content="Little Chicken — вебстудія повного циклу. Наваляєм сайт за 40 гривень.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0d0b0e;
-  --card:#1c1820;
-  --line:#2e2833;
-  --text:#f6eef2;
-  --muted:#a99aa4;
-  --red:#e0302a;
-  --rose:#ff5d8f;
-  --gold:#ffc94a;
+  --bg:#f7f6fb;
+  --bg-2:#ffffff;
+  --card:#ffffff;
+  --line:#e6e3ef;
+  --text:#14111c;
+  --muted:#6b6579;
+  --accent:#ff6a1a;
+  --accent-2:#ffb31a;
+  --violet:#6c4dff;
+  --green:#14b86a;
+  --shadow:0 10px 40px -12px rgba(30,20,60,.18);
+  --grad:linear-gradient(120deg,var(--accent),var(--accent-2));
+  --radius:22px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c0a12;--bg-2:#13101b;--card:#181421;--line:#2a2436;
+    --text:#f4f1fa;--muted:#a49db3;--shadow:0 10px 40px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0c0a12;--bg-2:#13101b;--card:#181421;--line:#2a2436;
+  --text:#f4f1fa;--muted:#a49db3;--shadow:0 10px 40px -12px rgba(0,0,0,.6);
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
-  margin:0;
-  min-height:100vh;
-  background:radial-gradient(ellipse at top,#2a1220 0%,var(--bg) 60%);
-  color:var(--text);
-  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding:24px 16px 40px;
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Manrope,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:16px;line-height:1.6;overflow-x:hidden;
+  transition:background .3s,color .3s;
 }
-header{text-align:center;max-width:520px}
-.kicker{
-  font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--rose);font-weight:700;
-}
-h1{
-  margin:6px 0 4px;font-size:clamp(40px,12vw,64px);line-height:1;color:var(--red);
-  font-weight:900;letter-spacing:-.02em;
-}
-.sub{color:var(--muted);font-size:15px;margin:0 0 20px}
-.progress{
-  font-size:14px;color:var(--muted);margin-bottom:14px;text-align:center;
-}
-.progress b{color:var(--gold)}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 16px}
+@media (min-width:768px){.wrap{padding:0 28px}}
+h1,h2,h3,.display{font-family:Unbounded,Manrope,sans-serif;letter-spacing:-.02em;line-height:1.1;margin:0}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.muted{color:var(--muted)}
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-  width:100%;
-  max-width:520px;
-}
-@media (min-width:600px){ .grid{grid-template-columns:repeat(3,1fr)} }
+/* ---------- scroll progress ---------- */
+.progress-bar{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grad);z-index:100}
 
-.cell{
-  position:relative;
-  aspect-ratio:1/1;
-  background:var(--card);
-  border:2px solid var(--line);
-  border-radius:16px;
-  padding:12px;
-  display:flex;align-items:center;justify-content:center;text-align:center;
-  font-size:15px;line-height:1.3;font-weight:600;color:var(--text);
-  cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
-  transition:transform .12s ease, background .2s ease, border-color .2s ease;
+/* ---------- announcement ---------- */
+.announce{
+  background:var(--text);color:var(--bg);font-size:14px;text-align:center;padding:8px 16px;
 }
-.cell:active{transform:scale(.96)}
-.cell .emoji{display:block;font-size:28px;margin-bottom:6px}
-.cell.special{border-color:var(--gold)}
-.cell.on{
-  background:linear-gradient(145deg,var(--red),#a3162a);
-  border-color:var(--red);
-}
-.cell.on::after{
-  content:"🌹";
-  position:absolute;top:6px;right:8px;font-size:20px;
-}
+.announce b{color:var(--accent-2)}
+.announce .timer{font-variant-numeric:tabular-nums;font-weight:800}
 
-.actions{margin-top:20px;display:flex;gap:10px}
-button.reset{
-  background:transparent;color:var(--muted);border:1px solid var(--line);
-  border-radius:999px;padding:10px 18px;font-size:14px;cursor:pointer;
+/* ---------- header ---------- */
+header.nav{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--bg) 78%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent;transition:border-color .3s;
 }
+header.nav.scrolled{border-bottom-color:var(--line)}
+.nav-inner{display:flex;align-items:center;gap:20px;height:70px}
+.logo{display:flex;align-items:center;gap:10px;font-family:Unbounded,sans-serif;font-weight:700;font-size:18px}
+.logo-mark{
+  width:38px;height:38px;border-radius:12px;background:var(--grad);
+  display:grid;place-items:center;font-size:20px;box-shadow:0 6px 20px -6px var(--accent);
+}
+.nav-links{display:none;gap:28px;margin-left:auto;font-weight:600;font-size:15px}
+.nav-links a{color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-actions{display:flex;align-items:center;gap:10px;margin-left:auto}
+@media (min-width:960px){.nav-links{display:flex}.nav-actions{margin-left:0}}
+.icon-btn{
+  width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--card);
+  color:var(--text);display:grid;place-items:center;cursor:pointer;font-size:18px;
+}
+.burger{display:grid}
+@media (min-width:960px){.burger{display:none}}
+.mobile-menu{
+  display:none;flex-direction:column;gap:4px;padding:8px 16px 20px;border-bottom:1px solid var(--line);
+}
+.mobile-menu.open{display:flex}
+.mobile-menu a{padding:12px 4px;font-weight:600;border-bottom:1px solid var(--line)}
+@media (min-width:960px){.mobile-menu{display:none!important}}
 
-/* win screen */
-.win{
-  position:fixed;inset:0;background:rgba(0,0,0,.85);
-  display:none;flex-direction:column;align-items:center;justify-content:center;
-  padding:16px;z-index:10;text-align:center;
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:0;border-radius:999px;padding:14px 26px;font:700 15px Manrope,sans-serif;cursor:pointer;
+  transition:transform .2s,box-shadow .2s,background .2s;white-space:nowrap;
 }
-.win.show{display:flex;animation:pop .35s ease}
-.win h2{font-size:clamp(56px,18vw,96px);margin:0;color:var(--gold);font-weight:900}
-.win p{color:var(--text);font-size:18px;margin:8px 0 18px}
-.win img{width:100%;max-width:420px;border-radius:16px}
-.win button{
-  margin-top:18px;background:var(--red);color:#fff;border:0;border-radius:999px;
-  padding:12px 24px;font-size:16px;font-weight:700;cursor:pointer;
-}
-@keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 12px 30px -10px var(--accent)}
+.btn-primary:hover{box-shadow:0 18px 40px -10px var(--accent)}
+.btn-ghost{background:var(--card);color:var(--text);border:1px solid var(--line)}
+.btn-sm{padding:10px 18px;font-size:14px}
+.hide-sm{display:none}
+@media (min-width:600px){.hide-sm{display:inline-flex}}
 
-.confetti{position:fixed;top:-20px;font-size:24px;pointer-events:none;z-index:11;
-  animation:fall linear forwards}
-@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+/* ---------- hero ---------- */
+.hero{position:relative;padding:56px 0 40px;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.45;pointer-events:none;z-index:0}
+.blob.b1{width:420px;height:420px;background:var(--accent);top:-120px;right:-80px;animation:float 12s ease-in-out infinite}
+.blob.b2{width:360px;height:360px;background:var(--violet);bottom:-140px;left:-120px;animation:float 14s ease-in-out infinite reverse}
+@keyframes float{50%{transform:translate(30px,40px) scale(1.08)}}
+.hero-grid{position:relative;z-index:1;display:grid;gap:48px;align-items:center}
+@media (min-width:960px){.hero-grid{grid-template-columns:1.05fr .95fr}}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;border-radius:999px;
+  background:var(--card);border:1px solid var(--line);font-size:13px;font-weight:700;box-shadow:var(--shadow);
+}
+.pill span{background:var(--grad);color:#fff;border-radius:999px;padding:2px 10px}
+.hero h1{font-size:clamp(38px,7vw,72px);font-weight:900;margin:22px 0 20px}
+.hero p.lead{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:540px;margin:0 0 30px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px}
+.trust{display:flex;align-items:center;gap:14px;margin-top:34px;flex-wrap:wrap}
+.avatars{display:flex}
+.avatars i{
+  width:38px;height:38px;border-radius:50%;border:3px solid var(--bg);margin-left:-10px;
+  display:grid;place-items:center;font-style:normal;font-size:17px;
+}
+.avatars i:first-child{margin-left:0}
+.stars{color:var(--accent-2);letter-spacing:2px}
+.trust small{display:block;color:var(--muted);font-size:13px}
+
+/* hero dashboard */
+.dash{
+  position:relative;background:var(--card);border:1px solid var(--line);border-radius:28px;
+  padding:22px;box-shadow:var(--shadow);
+}
+.dash-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:6px}
+.dash-head small{color:var(--muted);font-weight:600}
+.dash-total{font-family:Unbounded,sans-serif;font-size:clamp(22px,3.4vw,32px);font-weight:700;white-space:nowrap}
+.badge-up{
+  background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green);
+  font-weight:800;font-size:13px;padding:5px 10px;border-radius:999px;white-space:nowrap;
+}
+#heroChart{width:100%;height:auto;display:block}
+.dash-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.dash-row div{background:var(--bg);border-radius:14px;padding:10px 12px}
+.dash-row b{display:block;font-size:17px}
+.dash-row small{color:var(--muted);font-size:12px}
+.chip{
+  position:absolute;background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:10px 14px;box-shadow:var(--shadow);font-size:13px;font-weight:700;
+  display:flex;align-items:center;gap:10px;animation:bob 5s ease-in-out infinite;
+}
+.chip .ic{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-size:16px}
+.chip.c1{top:-18px;left:-10px}
+.chip.c2{bottom:-22px;right:-6px;animation-delay:-2.5s}
+@media (min-width:960px){.chip.c1{left:-40px}.chip.c2{right:-30px}}
+@keyframes bob{50%{transform:translateY(-10px)}}
+
+/* ---------- marquee ---------- */
+.clients{padding:40px 0 20px}
+.clients p{text-align:center;color:var(--muted);font-size:14px;font-weight:600;margin:0 0 18px;text-transform:uppercase;letter-spacing:.14em}
+.marquee{overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.marquee-track{display:flex;gap:56px;width:max-content;animation:scroll 32s linear infinite}
+.marquee-track span{font-family:Unbounded,sans-serif;font-weight:700;font-size:22px;color:var(--muted);opacity:.75;white-space:nowrap}
+@keyframes scroll{to{transform:translateX(-50%)}}
+
+/* ---------- sections ---------- */
+section{padding:80px 0}
+.sec-head{max-width:700px;margin:0 auto 48px;text-align:center}
+.eyebrow{display:inline-block;font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.sec-head h2{font-size:clamp(28px,4.5vw,46px);font-weight:700}
+.sec-head p{color:var(--muted);font-size:18px;margin:16px 0 0}
+
+/* ---------- stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media (min-width:860px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px 22px;
+}
+.stat .num{font-family:Unbounded,sans-serif;font-size:clamp(30px,4.5vw,46px);font-weight:900;line-height:1}
+.stat p{margin:10px 0 0;color:var(--muted);font-size:15px}
+
+/* ---------- services ---------- */
+.cards{display:grid;gap:16px}
+@media (min-width:700px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1000px){.cards{grid-template-columns:repeat(3,1fr)}}
+.card{
+  position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:28px;transition:transform .3s,box-shadow .3s,border-color .3s;overflow:hidden;
+}
+.card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.card .ico{
+  width:54px;height:54px;border-radius:16px;display:grid;place-items:center;font-size:26px;margin-bottom:18px;
+  background:color-mix(in srgb,var(--accent) 14%,transparent);
+}
+.card h3{font-size:20px;font-weight:700;margin-bottom:8px}
+.card p{margin:0;color:var(--muted)}
+.card .price-tag{display:inline-block;margin-top:16px;font-weight:800;color:var(--accent)}
+
+/* ---------- growth chart ---------- */
+.growth{display:grid;gap:24px}
+@media (min-width:960px){.growth{grid-template-columns:1.6fr 1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px}
+.tabs{display:inline-flex;background:var(--bg);border-radius:999px;padding:4px;gap:4px;flex-wrap:wrap}
+.tabs button{
+  border:0;background:transparent;color:var(--muted);font:700 14px Manrope,sans-serif;
+  padding:9px 16px;border-radius:999px;cursor:pointer;transition:all .2s;
+}
+.tabs button.active{background:var(--card);color:var(--text);box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.panel-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.legend{display:flex;gap:16px;font-size:13px;font-weight:600;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+#growthChart{width:100%;height:auto;display:block}
+#growthChart text{fill:var(--muted);font:600 12px Manrope,sans-serif}
+.tooltip{
+  position:absolute;pointer-events:none;background:var(--text);color:var(--bg);font-size:13px;font-weight:700;
+  padding:8px 12px;border-radius:10px;opacity:0;transition:opacity .15s;white-space:nowrap;transform:translate(-50%,-120%);
+}
+.chart-wrap{position:relative}
+
+/* ROI calc */
+.calc h3{font-size:22px;margin-bottom:6px}
+.calc label{display:block;font-weight:700;font-size:14px;margin:22px 0 8px}
+.calc label span{float:right;color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.calc-out{margin-top:24px;padding:20px;border-radius:18px;background:var(--grad);color:#fff}
+.calc-out small{opacity:.9;font-weight:600}
+.calc-out .display{font-size:clamp(28px,4vw,38px);font-weight:900;margin-top:4px}
+.calc-out p{margin:6px 0 0;font-size:14px;opacity:.9}
+.bars{display:flex;flex-direction:column;gap:14px;margin-top:20px}
+.bar-row{font-size:14px;font-weight:700}
+.bar-row .track{height:10px;background:var(--bg);border-radius:99px;margin-top:6px;overflow:hidden}
+.bar-row .fill{height:100%;width:0;border-radius:99px;background:var(--grad);transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.bar-row.old .fill{background:var(--muted)}
+
+/* ---------- process ---------- */
+.steps{display:grid;gap:16px;counter-reset:step}
+@media (min-width:860px){.steps{grid-template-columns:repeat(4,1fr)}}
+.step{position:relative;padding:28px 24px;border-radius:var(--radius);background:var(--card);border:1px solid var(--line)}
+.step::before{
+  counter-increment:step;content:"0" counter(step);
+  font-family:Unbounded,sans-serif;font-weight:900;font-size:44px;line-height:1;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+  display:block;margin-bottom:16px;
+}
+.step h3{font-size:18px;margin-bottom:6px}
+.step p{margin:0;color:var(--muted);font-size:15px}
+.step .time{display:inline-block;margin-top:14px;font-size:12px;font-weight:800;padding:4px 10px;border-radius:99px;background:var(--bg)}
+
+/* ---------- cases ---------- */
+.cases{display:grid;gap:18px}
+@media (min-width:860px){.cases{grid-template-columns:repeat(3,1fr)}}
+.case{border-radius:28px;overflow:hidden;background:var(--card);border:1px solid var(--line);transition:transform .3s}
+.case:hover{transform:translateY(-6px)}
+.case-cover{
+  aspect-ratio:16/11;display:grid;place-items:center;font-size:64px;position:relative;
+}
+.case-cover .mock{
+  width:72%;height:64%;background:rgba(255,255,255,.9);border-radius:12px;box-shadow:0 20px 40px -10px rgba(0,0,0,.3);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.case-cover .mock .bar{height:16px;background:#eee;display:flex;gap:4px;align-items:center;padding:0 6px}
+.case-cover .mock .bar i{width:6px;height:6px;border-radius:50%;background:#ccc}
+.case-cover .mock .body{flex:1;display:grid;place-items:center;font-size:44px}
+.case-body{padding:22px}
+.case-body small{color:var(--muted);font-weight:700;font-size:13px}
+.case-body h3{font-size:19px;margin:6px 0 14px}
+.case-kpis{display:flex;gap:18px}
+.case-kpis b{display:block;font-family:Unbounded,sans-serif;font-size:20px;color:var(--green)}
+.case-kpis span{font-size:12px;color:var(--muted)}
+
+/* ---------- pricing ---------- */
+.billing{display:flex;justify-content:center;margin-bottom:34px}
+.plans{display:grid;gap:18px;align-items:stretch}
+@media (min-width:900px){.plans{grid-template-columns:repeat(3,1fr)}}
+.plan{
+  position:relative;background:var(--card);border:1px solid var(--line);border-radius:28px;padding:32px 28px;
+  display:flex;flex-direction:column;
+}
+.plan.featured{background:var(--text);color:var(--bg);border-color:var(--text);box-shadow:var(--shadow)}
+@media (min-width:900px){.plan.featured{transform:scale(1.04)}}
+.plan.featured .muted,.plan.featured li{color:color-mix(in srgb,var(--bg) 75%,transparent)}
+.plan .tag{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;
+  font-size:12px;font-weight:800;padding:5px 14px;border-radius:99px;white-space:nowrap;
+}
+.plan h3{font-size:20px}
+.plan .cost{font-family:Unbounded,sans-serif;font-size:52px;font-weight:900;margin:18px 0 0;line-height:1}
+.plan .cost small{font-size:16px;font-weight:600;font-family:Manrope,sans-serif}
+.plan .old{text-decoration:line-through;color:var(--muted);font-weight:700;margin-top:6px;font-size:14px}
+.plan ul{list-style:none;padding:0;margin:24px 0 28px;display:flex;flex-direction:column;gap:10px;flex:1}
+.plan li{padding-left:28px;position:relative;font-size:15px}
+.plan li::before{content:"✓";position:absolute;left:0;top:0;width:20px;height:20px;border-radius:50%;
+  background:color-mix(in srgb,var(--green) 18%,transparent);color:var(--green);font-size:12px;font-weight:900;display:grid;place-items:center}
+.plan .btn{width:100%}
+
+/* ---------- testimonials ---------- */
+.reviews{display:grid;gap:16px}
+@media (min-width:860px){.reviews{grid-template-columns:repeat(3,1fr)}}
+.review{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+.review p{margin:12px 0 20px;font-size:16px}
+.who{display:flex;align-items:center;gap:12px}
+.who i{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:22px;font-style:normal}
+.who b{display:block;font-size:15px}
+.who small{color:var(--muted);font-size:13px}
+
+/* ---------- faq ---------- */
+.faq{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:0 22px;transition:border-color .2s}
+.faq details[open]{border-color:color-mix(in srgb,var(--accent) 50%,var(--line))}
+.faq summary{
+  list-style:none;cursor:pointer;padding:20px 0;font-weight:800;font-size:17px;
+  display:flex;justify-content:space-between;gap:16px;align-items:center;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:24px;font-weight:500;color:var(--accent);transition:transform .25s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{margin:0 0 20px;color:var(--muted)}
+
+/* ---------- cta ---------- */
+.cta{
+  position:relative;overflow:hidden;border-radius:36px;padding:48px 24px;
+  background:var(--text);color:var(--bg);display:grid;gap:32px;
+}
+@media (min-width:900px){.cta{grid-template-columns:1.1fr 1fr;padding:64px;align-items:center}}
+.cta h2{font-size:clamp(28px,4.5vw,46px)}
+.cta p{color:color-mix(in srgb,var(--bg) 70%,transparent);font-size:17px}
+.cta .blob{opacity:.35}
+.form{position:relative;z-index:1;display:flex;flex-direction:column;gap:12px}
+.form input,.form select{
+  width:100%;padding:16px 18px;border-radius:14px;border:1px solid color-mix(in srgb,var(--bg) 20%,transparent);
+  background:color-mix(in srgb,var(--bg) 8%,transparent);color:var(--bg);font:600 15px Manrope,sans-serif;outline:none;
+}
+.form select option{color:#111}
+.form input::placeholder{color:color-mix(in srgb,var(--bg) 55%,transparent)}
+.form input:focus{border-color:var(--accent)}
+.form small{color:color-mix(in srgb,var(--bg) 55%,transparent);font-size:12px}
+
+/* ---------- footer ---------- */
+footer{padding:56px 0 36px;border-top:1px solid var(--line);margin-top:40px}
+.foot{display:grid;gap:32px}
+@media (min-width:800px){.foot{grid-template-columns:1.5fr 1fr 1fr 1fr}}
+.foot h4{margin:0 0 14px;font-size:14px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.foot ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-weight:600}
+.foot ul a:hover{color:var(--accent)}
+.copy{margin-top:40px;color:var(--muted);font-size:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+/* ---------- misc ---------- */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
+.to-top{
+  position:fixed;right:16px;bottom:16px;z-index:40;opacity:0;pointer-events:none;transition:opacity .3s;
+  width:48px;height:48px;border-radius:50%;border:0;background:var(--grad);color:#fff;font-size:20px;cursor:pointer;box-shadow:var(--shadow);
+}
+.to-top.show{opacity:1;pointer-events:auto}
+.toast{
+  position:fixed;left:50%;bottom:24px;transform:translate(-50%,140%);z-index:60;transition:transform .4s cubic-bezier(.2,.8,.2,1);
+  background:var(--card);color:var(--text);border:1px solid var(--line);box-shadow:var(--shadow);
+  padding:14px 20px;border-radius:16px;font-weight:700;max-width:calc(100% - 32px);
+}
+.toast.show{transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}
+}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="kicker">Холостяк · 15 сезон</div>
-  <h1>БІНГО</h1>
-  <p class="sub">Тисни на клітинку, коли це сталося. Закрий усі — і перемога твоя.</p>
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="announce">
+  🔥 Акція: сайт за <b>40 ₴</b> замість 41 ₴. До кінця залишилось <span class="timer" id="timer">23:59:59</span>
+</div>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="logo"><span class="logo-mark">🐣</span>Little Chicken</a>
+    <nav class="nav-links">
+      <a href="#services">Послуги</a>
+      <a href="#results">Результати</a>
+      <a href="#cases">Кейси</a>
+      <a href="#pricing">Ціни</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeBtn" aria-label="Змінити тему">🌓</button>
+      <a href="#contact" class="btn btn-primary btn-sm hide-sm">Замовити сайт</a>
+      <button class="icon-btn burger" id="burger" aria-label="Меню">☰</button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#services">Послуги</a>
+    <a href="#results">Результати</a>
+    <a href="#cases">Кейси</a>
+    <a href="#pricing">Ціни</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact" class="btn btn-primary" style="margin-top:12px;border:0">Замовити сайт</a>
+  </div>
 </header>
 
-<div class="progress" id="progress"></div>
-<div class="grid" id="grid"></div>
+<main id="top">
 
-<div class="actions">
-  <button class="reset" id="reset">Почати заново</button>
+<!-- HERO -->
+<section class="hero">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <div class="pill reveal"><span>NEW</span> Вебстудія №1 у категорії «до 41 ₴»</div>
+      <h1 class="reveal d1">Наваляєм сайт<br>за <span class="grad-text">40 гривень</span></h1>
+      <p class="lead reveal d2">Дизайн, розробка, SEO та маркетинг під ключ. Ваш бізнес отримує сайт, який продає, а ви зберігаєте бюджет на шаурму.</p>
+      <div class="hero-ctas reveal d3">
+        <a href="#contact" class="btn btn-primary">Отримати сайт за 40 ₴ →</a>
+        <a href="#cases" class="btn btn-ghost">▶ Дивитись кейси</a>
+      </div>
+      <div class="trust reveal d3">
+        <div class="avatars">
+          <i style="background:#ffd9c2">👩‍💼</i><i style="background:#d9d2ff">👨‍🍳</i><i style="background:#c9f2dd">🧑‍🌾</i><i style="background:#ffe8a8">👵</i>
+        </div>
+        <div>
+          <span class="stars">★★★★★</span> <b>4.9/5</b>
+          <small>на основі 1 247 відгуків наших мам</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal d2" style="position:relative">
+      <div class="dash">
+        <div class="dash-head">
+          <div>
+            <small>Прибуток клієнта після запуску</small>
+            <div class="dash-total"><span data-count="4000000" data-suffix=" ₴">0 ₴</span></div>
+          </div>
+          <span class="badge-up">▲ +9 999 900%</span>
+        </div>
+        <svg id="heroChart" viewBox="0 0 400 180" preserveAspectRatio="none" aria-label="Графік зростання прибутку"></svg>
+        <div class="dash-row">
+          <div><b data-count="312" data-suffix="%">0%</b><small>Конверсія</small></div>
+          <div><b data-count="40" data-prefix="×">×0</b><small>Трафік</small></div>
+          <div><b data-count="0" data-suffix=" ₴">0 ₴</b><small>Ваші втрати</small></div>
+        </div>
+      </div>
+      <div class="chip c1"><span class="ic" style="background:#c9f2dd">💸</span>Нова заявка · щойно</div>
+      <div class="chip c2"><span class="ic" style="background:#ffe1cc">🚀</span>Сайт готовий за 40 хв</div>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<div class="clients">
+  <p>Нам довіряють лідери ринку</p>
+  <div class="marquee">
+    <div class="marquee-track" id="marquee">
+      <span>Курятник Group</span><span>Яйце.ua</span><span>ШаурмаХаб</span><span>Бабуся Consulting</span>
+      <span>Гараж Ventures</span><span>Сало Capital</span><span>Борщ&nbsp;Labs</span><span>Пиріжок Inc.</span>
+    </div>
+  </div>
 </div>
 
-<div class="win" id="win">
-  <h2>БІНГО!</h2>
-  <p>Усе збулося. Троянда твоя 🌹</p>
-  <img src="IMG_0073.jpeg" alt="Так!">
-  <button id="again">Грати ще</button>
-</div>
+<!-- STATS -->
+<section style="padding-top:40px">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat reveal"><div class="num grad-text" data-count="1247">0</div><p>сайтів наваляли з 2009 року</p></div>
+      <div class="stat reveal d1"><div class="num grad-text" data-count="40" data-suffix=" ₴">0 ₴</div><p>фіксована ціна. Назавжди. Чесно.</p></div>
+      <div class="stat reveal d2"><div class="num grad-text" data-count="99.9" data-decimals="1" data-suffix="%">0%</div><p>клієнтів повертаються ще за 40 ₴</p></div>
+      <div class="stat reveal d3"><div class="num grad-text" data-count="40" data-suffix=" хв">0 хв</div><p>середній час від брифу до запуску</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Послуги</span>
+      <h2>Все, що потрібно вашому бізнесу. За 40 ₴.</h2>
+      <p>Від лендингу до маркетплейсу. Ціна не змінюється, змінюється тільки ваш прибуток.</p>
+    </div>
+    <div class="cards">
+      <div class="card reveal"><div class="ico">🎯</div><h3>Лендинги</h3><p>Односторінкові сайти, що конвертують відвідувачів у клієнтів швидше, ніж ви встигнете сказати «40 гривень».</p><span class="price-tag">40 ₴</span></div>
+      <div class="card reveal d1"><div class="ico">🛒</div><h3>Інтернет-магазини</h3><p>Кошик, оплата, доставка, акції. Продаєте яйця чи яхти: магазин витримає все.</p><span class="price-tag">40 ₴</span></div>
+      <div class="card reveal d2"><div class="ico">🏢</div><h3>Корпоративні сайти</h3><p>Солідно, як у банку. Тільки дешевше за комісію банку.</p><span class="price-tag">40 ₴</span></div>
+      <div class="card reveal"><div class="ico">🎨</div><h3>UI/UX дизайн</h3><p>Дослідження, прототипи, дизайн-система. Фігма на 400 фреймів у подарунок.</p><span class="price-tag">40 ₴</span></div>
+      <div class="card reveal d1"><div class="ico">📈</div><h3>SEO та реклама</h3><p>Виведемо в ТОП Google за запитом «сайт за 40 гривень». Вже вивели себе.</p><span class="price-tag">40 ₴</span></div>
+      <div class="card reveal d2"><div class="ico">🤖</div><h3>AI-інтеграції</h3><p>Чат-бот, що відповідає клієнтам о 3-й ночі ввічливіше за вашого менеджера.</p><span class="price-tag">40 ₴</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Результати</span>
+      <h2>Ваше майбутнє в цифрах</h2>
+      <p>Прогноз на основі 1 247 запусків. Минулі результати не гарантують майбутніх, але дуже на них натякають.</p>
+    </div>
+    <div class="growth">
+      <div class="panel reveal">
+        <div class="panel-top">
+          <div class="tabs" id="tabs">
+            <button class="active" data-key="profit">Прибуток</button>
+            <button data-key="traffic">Трафік</button>
+            <button data-key="leads">Заявки</button>
+          </div>
+          <div class="legend">
+            <span><i style="background:var(--accent)"></i>З нашим сайтом</span>
+            <span><i style="background:var(--muted)"></i>Без нього</span>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <svg id="growthChart" viewBox="0 0 640 320" aria-label="Порівняльний графік"></svg>
+          <div class="tooltip" id="tooltip"></div>
+        </div>
+      </div>
+
+      <div class="panel calc reveal d1">
+        <h3>Калькулятор окупності</h3>
+        <p class="muted" style="margin:0">Посуньте повзунки й побачите, скільки ви заробите.</p>
+        <label>Клієнтів на місяць зараз <span id="cOut">50</span></label>
+        <input type="range" id="clients" min="5" max="500" value="50">
+        <label>Середній чек, ₴ <span id="aOut">500</span></label>
+        <input type="range" id="avg" min="50" max="5000" step="50" value="500">
+        <div class="calc-out">
+          <small>Додатковий прибуток за рік</small>
+          <div class="display" id="roi">0 ₴</div>
+          <p>Окупність інвестиції у 40 ₴: <b id="roiX">0</b></p>
+        </div>
+        <div class="bars" id="bars">
+          <div class="bar-row old">Швидкість звичайного сайту<div class="track"><div class="fill" data-w="34"></div></div></div>
+          <div class="bar-row">Швидкість сайту Little Chicken<div class="track"><div class="fill" data-w="98"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Як ми працюємо</span>
+      <h2>4 кроки до сайту мрії</h2>
+      <p>Agile, Scrum, Kanban і трохи магії. Прозоро на кожному етапі.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><h3>Бриф</h3><p>Розповідаєте, що потрібно. Ми уважно киваємо.</p><span class="time">5 хв</span></div>
+      <div class="step reveal d1"><h3>Наваляли</h3><p>Дизайн і розробка в одному швидкому творчому пориві.</p><span class="time">30 хв</span></div>
+      <div class="step reveal d2"><h3>Запуск</h3><p>Домен, хостинг, SSL і перша заявка від мами.</p><span class="time">5 хв</span></div>
+      <div class="step reveal d3"><h3>Прибуток</h3><p>Рахуєте гроші. Ми рахуємо наші 40 ₴.</p><span class="time">∞</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CASES -->
+<section id="cases" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Кейси</span>
+      <h2>Проєкти, якими ми пишаємось</h2>
+      <p>Реальні* бізнеси, реальні* результати.<br><small>* майже</small></p>
+    </div>
+    <div class="cases">
+      <article class="case reveal">
+        <div class="case-cover" style="background:linear-gradient(135deg,#ff9a3c,#ff5e62)"><div class="mock"><div class="bar"><i></i><i></i><i></i></div><div class="body">🥚</div></div></div>
+        <div class="case-body"><small>E-commerce · Фермерство</small><h3>Яйце.ua: онлайн-продаж яєць</h3>
+          <div class="case-kpis"><div><b>+480%</b><span>продажів</span></div><div><b>×12</b><span>трафіку</span></div></div></div>
+      </article>
+      <article class="case reveal d1">
+        <div class="case-cover" style="background:linear-gradient(135deg,#6c4dff,#b44dff)"><div class="mock"><div class="bar"><i></i><i></i><i></i></div><div class="body">🌯</div></div></div>
+        <div class="case-body"><small>Food tech · Доставка</small><h3>ШаурмаХаб: мережа з 1 кіоску</h3>
+          <div class="case-kpis"><div><b>+312%</b><span>замовлень</span></div><div><b>−70%</b><span>черга</span></div></div></div>
+      </article>
+      <article class="case reveal d2">
+        <div class="case-cover" style="background:linear-gradient(135deg,#14b86a,#0fc4c4)"><div class="mock"><div class="bar"><i></i><i></i><i></i></div><div class="body">🥟</div></div></div>
+        <div class="case-body"><small>Корпоративний · Консалтинг</small><h3>Бабуся Consulting: вареники B2B</h3>
+          <div class="case-kpis"><div><b>+900%</b><span>онуків</span></div><div><b>4.9★</b><span>рейтинг</span></div></div></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Ціни</span>
+      <h2>Прозорі тарифи без прихованих платежів</h2>
+      <p>Оберіть план, який підходить саме вам. Спойлер: всі коштують однаково.</p>
+    </div>
+    <div class="billing reveal">
+      <div class="tabs" id="billing">
+        <button class="active" data-b="m">Разово</button>
+        <button data-b="y">Річна підписка −0%</button>
+      </div>
+    </div>
+    <div class="plans">
+      <div class="plan reveal">
+        <h3>Старт</h3><p class="muted" style="margin:6px 0 0">Для тих, хто тільки починає</p>
+        <div class="cost">40 <small>₴</small></div><div class="old">50 ₴</div>
+        <ul><li>Лендинг до 5 блоків</li><li>Адаптив під мобільні</li><li>Форма заявки</li><li>Підтримка в Telegram</li></ul>
+        <a href="#contact" class="btn btn-ghost">Обрати</a>
+      </div>
+      <div class="plan featured reveal d1">
+        <span class="tag">⭐ Найпопулярніший</span>
+        <h3>Бізнес</h3><p class="muted" style="margin:6px 0 0">Для бізнесу, що росте</p>
+        <div class="cost">40 <small>₴</small></div><div class="old">400 ₴</div>
+        <ul><li>Все зі «Старт»</li><li>До 20 сторінок</li><li>SEO-оптимізація</li><li>Аналітика та CRM</li><li>Персональний менеджер</li></ul>
+        <a href="#contact" class="btn btn-primary">Обрати</a>
+      </div>
+      <div class="plan reveal d2">
+        <h3>Enterprise</h3><p class="muted" style="margin:6px 0 0">Для корпорацій та імперій</p>
+        <div class="cost">40 <small>₴</small></div><div class="old">4 000 000 ₴</div>
+        <ul><li>Все з «Бізнес»</li><li>Необмежено сторінок</li><li>SLA 99.99%</li><li>Особистий AI-асистент</li><li>Ми самі приїдемо</li></ul>
+        <a href="#contact" class="btn btn-ghost">Зв'язатися</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Відгуки</span>
+      <h2>Що кажуть наші клієнти</h2>
+    </div>
+    <div class="reviews">
+      <div class="review reveal"><span class="stars">★★★★★</span><p>«Заплатили 40 гривень, отримали сайт, клієнтів і нервовий зрив від кількості замовлень. Рекомендую!»</p>
+        <div class="who"><i style="background:#ffe1cc">👩‍🌾</i><div><b>Оксана</b><small>CEO, Курятник Group</small></div></div></div>
+      <div class="review reveal d1"><span class="stars">★★★★★</span><p>«Думав, що за такі гроші буде сайт на Народ.ру. А вийшло краще, ніж у конкурентів за 200 000.»</p>
+        <div class="who"><i style="background:#d9d2ff">🧔</i><div><b>Андрій</b><small>Засновник, Гараж Ventures</small></div></div></div>
+      <div class="review reveal d2"><span class="stars">★★★★★</span><p>«Онук сказав, що це найкраща інвестиція року. Сорок гривень, як дві маршрутки!»</p>
+        <div class="who"><i style="background:#c9f2dd">👵</i><div><b>Галина Петрівна</b><small>Голова правління, Бабуся Consulting</small></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">FAQ</span>
+      <h2>Часті запитання</h2>
+    </div>
+    <div class="faq reveal">
+      <details open><summary>Чому так дешево?</summary><p>Ми оптимізували процеси, автоматизували рутину і відмовилися від офісу з кавомашиною. Вся економія йде вам.</p></details>
+      <details><summary>Чи є приховані платежі?</summary><p>Ні. 40 гривень і все. Хіба що ви самі захочете залишити на чай.</p></details>
+      <details><summary>Скільки часу займає розробка?</summary><p>У середньому 40 хвилин. Для Enterprise можемо розтягнути до 41, щоб виглядало солідніше.</p></details>
+      <details><summary>Можна оплатити частинами?</summary><p>Так: 4 платежі по 10 ₴ або 40 платежів по 1 ₴. Без переплат.</p></details>
+      <details><summary>А якщо сайт не сподобається?</summary><p>Наваляємо ще раз. Безкоштовно. Гарантія задоволення: 100%.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contact" style="padding-top:20px">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div class="blob b1"></div>
+      <div style="position:relative;z-index:1">
+        <span class="eyebrow">Почнімо</span>
+        <h2>Готові наваляти ваш сайт?</h2>
+        <p>Залиште заявку, і менеджер передзвонить за 40 секунд. Перші 10 клієнтів сьогодні отримують домен у подарунок.</p>
+      </div>
+      <form class="form" id="form">
+        <input type="text" placeholder="Ваше ім'я" required>
+        <input type="tel" placeholder="Телефон або Telegram" required>
+        <select>
+          <option>Лендинг: 40 ₴</option>
+          <option>Інтернет-магазин: 40 ₴</option>
+          <option>Корпоративний сайт: 40 ₴</option>
+          <option>Щось грандіозне: 40 ₴</option>
+        </select>
+        <button class="btn btn-primary" type="submit">Отримати сайт за 40 ₴ →</button>
+        <small>Натискаючи кнопку, ви погоджуєтесь стати успішним.</small>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a href="#top" class="logo"><span class="logo-mark">🐣</span>Little Chicken</a>
+        <p class="muted" style="max-width:320px">Вебстудія повного циклу. Наваляєм сайт за 40 гривень з 2009 року.</p>
+      </div>
+      <div><h4>Послуги</h4><ul><li><a href="#services">Лендинги</a></li><li><a href="#services">Магазини</a></li><li><a href="#services">SEO</a></li></ul></div>
+      <div><h4>Студія</h4><ul><li><a href="#cases">Кейси</a></li><li><a href="#process">Процес</a></li><li><a href="#pricing">Ціни</a></li></ul></div>
+      <div><h4>Контакти</h4><ul><li><a href="#contact">Залишити заявку</a></li><li>Київ, Україна</li><li>Пн–Нд, 24/7</li></ul></div>
+    </div>
+    <div class="copy"><span>© <span id="year"></span> Little Chicken Studio</span><span>Зроблено з 🧡 за 40 ₴</span></div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Нагору">↑</button>
+<div class="toast" id="toast">🎉 Дякуємо! Ми вже навалюємо ваш сайт.</div>
 
 <script>
-const items = [
-  { e:"🐔", t:"Учасниця прийшла з твариною" },
-  { e:"📏", t:"Жарт про зріст Холостяка" },
-  { e:"🏀", t:"Хтось кидає м'яч у кошик" },
-  { e:"😭", t:"Сльози перед церемонією троянд" },
-  { e:"💬", t:"«Я прийшла сюди за коханням, а не за шоу»" },
-  { e:"📺", t:"Влад вже дивиться холостяка", special:true },
-];
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const fmt = n => Math.round(n).toLocaleString("uk-UA");
 
-const KEY = "bingo-holostyak-15";
-let state = load();
+/* theme */
+const root = document.documentElement;
+try { const t = localStorage.getItem("lc-theme"); if (t) root.dataset.theme = t; } catch(e){}
+$("#themeBtn").onclick = () => {
+  const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  root.dataset.theme = dark ? "light" : "dark";
+  try { localStorage.setItem("lc-theme", root.dataset.theme); } catch(e){}
+};
 
-function load(){
-  try { const s = JSON.parse(localStorage.getItem(KEY)); if (Array.isArray(s) && s.length===items.length) return s; } catch(e){}
-  return items.map(()=>false);
+/* mobile menu */
+$("#burger").onclick = () => $("#mobileMenu").classList.toggle("open");
+$$("#mobileMenu a").forEach(a => a.onclick = () => $("#mobileMenu").classList.remove("open"));
+
+/* scroll: progress, sticky shadow, to-top */
+const onScroll = () => {
+  const h = document.documentElement;
+  const p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
+  $("#progressBar").style.width = (p * 100) + "%";
+  $("#nav").classList.toggle("scrolled", h.scrollTop > 10);
+  $("#toTop").classList.toggle("show", h.scrollTop > 700);
+};
+addEventListener("scroll", onScroll, { passive:true });
+$("#toTop").onclick = () => scrollTo({ top:0, behavior:"smooth" });
+
+/* countdown to midnight */
+function tick(){
+  const now = new Date(), end = new Date(now); end.setHours(24,0,0,0);
+  let s = Math.floor((end - now) / 1000);
+  const pad = n => String(n).padStart(2, "0");
+  $("#timer").textContent = `${pad(Math.floor(s/3600))}:${pad(Math.floor(s%3600/60))}:${pad(s%60)}`;
 }
-function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
+tick(); setInterval(tick, 1000);
 
-const grid = document.getElementById("grid");
-const progress = document.getElementById("progress");
-const win = document.getElementById("win");
+/* marquee: duplicate content for seamless loop */
+const mq = $("#marquee"); mq.innerHTML += mq.innerHTML;
 
-function render(){
-  grid.innerHTML = "";
-  items.forEach((it,i)=>{
-    const c = document.createElement("div");
-    c.className = "cell" + (state[i] ? " on" : "") + (it.special ? " special" : "");
-    c.innerHTML = `<div><span class="emoji">${it.e}</span>${it.t}</div>`;
-    c.onclick = () => toggle(i);
-    grid.appendChild(c);
+/* animated counters */
+function countUp(el){
+  const target = parseFloat(el.dataset.count), dec = +(el.dataset.decimals || 0);
+  const pre = el.dataset.prefix || "", suf = el.dataset.suffix || "";
+  const dur = 1800, t0 = performance.now();
+  const step = t => {
+    const k = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - k, 4);
+    const v = target * e;
+    el.textContent = pre + (dec ? v.toFixed(dec).replace(".", ",") : fmt(v)) + suf;
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+/* reveal + triggers */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    const el = en.target;
+    el.classList.add("in");
+    $$("[data-count]", el).forEach(countUp);
+    if (el.matches("[data-count]")) countUp(el);
+    $$(".fill", el).forEach(f => f.style.width = f.dataset.w + "%");
+    if (el.contains($("#growthChart")) && !el.dataset.drawn){ el.dataset.drawn = 1; drawGrowth(current); }
+    io.unobserve(el);
   });
-  const n = state.filter(Boolean).length;
-  progress.innerHTML = `Закрито <b>${n}</b> з ${items.length}`;
-}
+}, { threshold:.18 });
+$$(".reveal").forEach(el => io.observe(el));
 
-function toggle(i){
-  state[i] = !state[i];
-  save(); render();
-  if (state.every(Boolean)) celebrate();
-}
+/* hero sparkline */
+(function(){
+  const svg = $("#heroChart"), W = 400, H = 180;
+  const pts = [8,10,9,14,13,20,24,22,34,42,40,58,70,88,100];
+  const max = 100, xs = i => i * W / (pts.length - 1), ys = v => H - 10 - v / max * (H - 30);
+  const d = pts.map((v,i) => (i ? "L" : "M") + xs(i).toFixed(1) + " " + ys(v).toFixed(1)).join(" ");
+  svg.innerHTML = `
+    <defs><linearGradient id="hg" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#ff6a1a" stop-opacity=".35"/><stop offset="1" stop-color="#ff6a1a" stop-opacity="0"/></linearGradient></defs>
+    <path d="${d} L${W} ${H} L0 ${H}Z" fill="url(#hg)"/>
+    <path id="hline" d="${d}" fill="none" stroke="#ff6a1a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+    <circle cx="${xs(pts.length-1)}" cy="${ys(100)}" r="5" fill="#ff6a1a"/>`;
+  const line = $("#hline"), len = line.getTotalLength();
+  line.style.strokeDasharray = len; line.style.strokeDashoffset = len;
+  line.getBoundingClientRect();
+  line.style.transition = "stroke-dashoffset 2.2s cubic-bezier(.2,.8,.2,1)";
+  requestAnimationFrame(() => line.style.strokeDashoffset = 0);
+})();
 
-function celebrate(){
-  win.classList.add("show");
-  const bits = ["🌹","💍","🏀","🐔","✨","❤️"];
-  for (let k=0;k<40;k++){
-    const s = document.createElement("div");
-    s.className = "confetti";
-    s.textContent = bits[k % bits.length];
-    s.style.left = Math.random()*100 + "vw";
-    s.style.animationDuration = (2 + Math.random()*2) + "s";
-    s.style.animationDelay = (Math.random()*0.8) + "s";
-    document.body.appendChild(s);
-    setTimeout(()=>s.remove(), 5000);
+/* growth chart: bars = without us, line = with us */
+const months = ["Січ","Лют","Бер","Кві","Тра","Чер","Лип","Сер","Вер","Жов","Лис","Гру"];
+const data = {
+  profit:  { unit:" тис ₴", us:[12,18,27,40,58,80,110,150,200,260,330,420], them:[10,11,10,12,11,13,12,12,14,13,14,15] },
+  traffic: { unit:" тис",   us:[2,4,7,11,16,24,33,45,60,78,99,124],        them:[2,2,3,3,3,4,4,4,5,5,5,6] },
+  leads:   { unit:" заявок",us:[15,30,48,70,96,130,170,215,270,330,400,480], them:[14,15,15,16,16,17,18,18,19,19,20,21] }
+};
+let current = "profit";
+function drawGrowth(key){
+  const svg = $("#growthChart"), tip = $("#tooltip"), W = 640, H = 320, pl = 44, pr = 12, pt = 16, pb = 34;
+  const { us, them, unit } = data[key];
+  const max = Math.ceil(Math.max(...us) / 100) * 100 || 100;
+  const cw = (W - pl - pr) / months.length;
+  const x = i => pl + cw * i + cw / 2, y = v => pt + (H - pt - pb) * (1 - v / max);
+  let g = `<defs><linearGradient id="ga" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#ff6a1a" stop-opacity=".28"/><stop offset="1" stop-color="#ff6a1a" stop-opacity="0"/></linearGradient></defs>`;
+  for (let i = 0; i <= 4; i++){
+    const v = max / 4 * i, yy = y(v);
+    g += `<line x1="${pl}" x2="${W-pr}" y1="${yy}" y2="${yy}" stroke="currentColor" stroke-opacity=".1"/>
+          <text x="${pl-8}" y="${yy+4}" text-anchor="end">${fmt(v)}</text>`;
   }
-}
+  months.forEach((m,i) => {
+    const bw = cw * .42, bh = (H - pt - pb) * them[i] / max;
+    g += `<rect x="${x(i)-bw/2}" y="${H-pb}" width="${bw}" height="0" rx="4" fill="currentColor" fill-opacity=".22">
+            <animate attributeName="height" to="${bh}" dur=".8s" begin="${i*0.04}s" fill="freeze"/>
+            <animate attributeName="y" to="${H-pb-bh}" dur=".8s" begin="${i*0.04}s" fill="freeze"/></rect>
+          <text x="${x(i)}" y="${H-12}" text-anchor="middle">${m}</text>`;
+  });
+  const d = us.map((v,i) => (i ? "L" : "M") + x(i) + " " + y(v)).join(" ");
+  g += `<path d="${d} L${x(11)} ${H-pb} L${x(0)} ${H-pb}Z" fill="url(#ga)" opacity="0"><animate attributeName="opacity" to="1" dur="1s" begin=".6s" fill="freeze"/></path>
+        <path id="gline" d="${d}" fill="none" stroke="#ff6a1a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+  us.forEach((v,i) => g += `<circle class="pt" cx="${x(i)}" cy="${y(v)}" r="4.5" fill="var(--card)" stroke="#ff6a1a" stroke-width="2.5"/>`);
+  months.forEach((m,i) => g += `<rect class="hit" data-i="${i}" x="${pl+cw*i}" y="${pt}" width="${cw}" height="${H-pt-pb}" fill="transparent"/>`);
+  svg.style.color = "var(--muted)";
+  svg.innerHTML = g;
 
-function reset(){
-  state = items.map(()=>false);
-  save(); render(); win.classList.remove("show");
-}
+  const line = $("#gline", svg), len = line.getTotalLength();
+  line.style.strokeDasharray = len; line.style.strokeDashoffset = len;
+  line.getBoundingClientRect();
+  line.style.transition = "stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1)";
+  line.style.strokeDashoffset = 0;
 
-document.getElementById("reset").onclick = reset;
-document.getElementById("again").onclick = reset;
-render();
+  $$(".hit", svg).forEach(r => {
+    const show = () => {
+      const i = +r.dataset.i, box = svg.getBoundingClientRect(), s = box.width / W;
+      tip.innerHTML = `${months[i]}: ${fmt(us[i])}${unit} <span style="opacity:.6">vs ${fmt(them[i])}</span>`;
+      tip.style.left = x(i) * s + "px"; tip.style.top = y(us[i]) * s + "px"; tip.style.opacity = 1;
+    };
+    r.addEventListener("mouseenter", show); r.addEventListener("touchstart", show, { passive:true });
+    r.addEventListener("mouseleave", () => tip.style.opacity = 0);
+  });
+}
+$$("#tabs button").forEach(b => b.onclick = () => {
+  $$("#tabs button").forEach(x => x.classList.remove("active")); b.classList.add("active");
+  current = b.dataset.key; drawGrowth(current);
+});
+
+/* ROI calculator */
+function calc(){
+  const c = +$("#clients").value, a = +$("#avg").value;
+  $("#cOut").textContent = c; $("#aOut").textContent = fmt(a);
+  const extra = c * a * 12 * 2.12;  // +212% sales uplift
+  $("#roi").textContent = "+" + fmt(extra) + " ₴";
+  $("#roiX").textContent = fmt(extra / 40) + "×";
+}
+$("#clients").oninput = $("#avg").oninput = calc; calc();
+
+/* billing toggle: the price stays 40 either way */
+$$("#billing button").forEach(b => b.onclick = () => {
+  $$("#billing button").forEach(x => x.classList.remove("active")); b.classList.add("active");
+});
+
+/* form: no backend, just a thank-you toast */
+$("#form").onsubmit = e => {
+  e.preventDefault(); e.target.reset();
+  const t = $("#toast"); t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 3500);
+};
+
+$("#year").textContent = new Date().getFullYear();
+onScroll();
 </script>
 </body>
 </html>
